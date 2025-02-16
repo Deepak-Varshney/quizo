@@ -81,7 +81,7 @@ Quizo is a responsive quiz management system that allows teachers to log in, cre
 
 ## Project Structure
 
-
+```
 quizo/
 ├── app/
 │   └── api/
@@ -109,7 +109,7 @@ quizo/
 ├── package.json
 ├── tsconfig.json
 └── README.md
-
+```
 
 ## API Documentation
 
