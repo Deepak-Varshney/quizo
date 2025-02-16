@@ -1,36 +1,204 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quizo - Quiz Management System
 
-## Getting Started
+Quizo is a responsive quiz management system that allows teachers to log in, create, manage, and view their quizzes. This project is built using Next.js with TypeScript for both frontend and backend API routes, MongoDB (via Mongoose) for data storage, and ShadCN UI components with Tailwind CSS for a modern, responsive design.
 
-First, run the development server:
+## Table of Contents
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
+- [Usage](#usage)
+- [Deployment](#deployment)
+- [License](#license)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **User Login:**
+  - A simple login page with static demo credentials.
+  - Form validation and error handling.
+  
+- **Quiz Management:**
+  - Dashboard displaying all quizzes created by the teacher.
+  - Create, edit, and delete quizzes via dedicated forms.
+  - Basic form validations to ensure required fields are provided.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Responsive Design:**
+  - Uses Tailwind CSS and ShadCN UI components for a clean, modern, and mobile-friendly UI.
 
-## Learn More
+- **Backend API:**
+  - Next.js API routes for authentication and full CRUD operations for quizzes.
+  - MongoDB integration using Mongoose.
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Frontend & Backend:** Next.js, TypeScript
+- **Database:** MongoDB (via Mongoose)
+- **UI:** ShadCN UI components, Tailwind CSS
+- **API Routes:** Next.js (App Router) API routes
+- **Authentication:** Static credentials (configured in environment variables)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Installation
 
-## Deploy on Vercel
+1. **Clone the Repository:**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   git clone https://github.com/yourusername/quizo.git
+   cd quizo
+   
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. **Install Dependencies:**
+
+   npm install
+   
+
+3. **Configure Environment Variables:**
+
+   Create a file named `.env` in the project root and add the following:
+
+   MONGODB_URI=
+   TEACHER_USERNAME=teacher
+   TEACHER_PASSWORD=123
+   NEXT_PUBLIC_API_URL=http://localhost:3000
+
+
+   Replace `<username>`, `<password>`, and other values with your own configuration.
+
+4. **Run the Development Server:**
+
+   npm run dev
+
+   The app will start on [http://localhost:3000]
+
+## Configuration
+
+- **Database Connection:**  
+  The connection logic is handled in `lib/dbConnect.ts` using Mongoose. Ensure your MongoDB connection string in `.env.local` is correct.
+
+- **Static Authentication:**  
+  The teacher's credentials are set via environment variables (`TEACHER_USERNAME` and `TEACHER_PASSWORD`).
+
+## Project Structure
+
+
+quizo/
+├── app/
+│   └── api/
+│       ├── login/
+│       │   └── route.ts         # Login API using static credentials
+│       └── quizzes/
+│           ├── route.ts         # GET (list) and POST (create) quizzes
+│           └── [id]/
+│               └── route.ts     # GET, PUT, DELETE a quiz by ID
+├── components/
+│   └── ui/                    # ShadCN UI components (Button, Input, Textarea, Card, etc.)
+├── lib/
+│   └── dbConnect.ts           # MongoDB connection helper
+├── models/
+│   └── Quiz.ts                # Mongoose model for quizzes
+├── pages/
+│   ├── dashboard.tsx          # Dashboard page (list quizzes)
+│   ├── index.tsx              # Login page
+│   └── quiz/
+│       ├── new.tsx            # Create Quiz page
+│       └── [id].tsx           # Edit Quiz page
+├── public/
+├── styles/
+├── .env.local
+├── package.json
+├── tsconfig.json
+└── README.md
+
+
+## API Documentation
+
+### Authentication API
+
+- **POST** `/api/login`  
+  **Description:** Validates teacher credentials.  
+  **Request Body:**
+  
+  {
+    "username": "teacher",
+    "password": "demo123"
+  }
+  
+  **Response:**
+  - 200: `{ "message": "Login successful" }`
+  - 401: `{ "message": "Invalid Credentials! Login not success" }`
+
+### Quiz Management APIs
+
+#### List & Create Quizzes
+
+- **GET** `/api/quizzes`  
+  **Description:** Retrieves all quizzes created by the teacher.  
+  **Response:**
+  
+  [
+    {
+      "_id": "quizId",
+      "title": "Quiz Title",
+      "description": "Quiz Description",
+      "teacher": "teacher",
+      "createdAt": "2023-01-01T00:00:00.000Z"
+    },
+    ...
+  ]
+  
+
+- **POST** `/api/quizzes`  
+  **Description:** Creates a new quiz.  
+  **Request Body:**
+  
+  {
+    "title": "New Quiz",
+    "description": "Description of the new quiz"
+  }
+  
+  **Response:**  
+  - 201: Returns the newly created quiz object.
+
+#### Get, Update, Delete a Specific Quiz
+
+- **GET** `/api/quizzes/[id]`  
+  **Description:** Retrieves a specific quiz by its ID.
+  
+- **PUT** `/api/quizzes/[id]`  
+  **Description:** Updates an existing quiz's title or description.
+  **Request Body:**
+  
+  {
+    "title": "Updated Quiz Title",
+    "description": "Updated description"
+  }
+  
+
+- **DELETE** `/api/quizzes/[id]`  
+  **Description:** Deletes a quiz by its ID.
+
+## Usage
+
+1. **Login:**  
+   Navigate to [http://localhost:3000](http://localhost:3000) and log in using the static credentials configured in `.env.local`.
+
+2. **Dashboard:**  
+   After logging in, you will be redirected to the Dashboard, which displays a list of quizzes.  
+   - Create a new quiz using the "Create New Quiz" button.
+   - Edit or delete existing quizzes using the provided options.
+
+3. **Quiz Creation & Editing:**  
+   - Use the "Create New Quiz" page to add new quizzes.
+   - Edit an existing quiz by clicking on the "Edit" button on the Dashboard, which takes you to the Edit Quiz page.
+
+## Deployment
+
+- **Next.js Deployment:**  
+  This project can be deployed on platforms like Vercel for seamless integration of both frontend and API routes.
+- **Environment Variables:**  
+  Ensure your environment variables are set correctly on your deployment platform.
+
+## License
+
+This project is licensed under the MIT License.
