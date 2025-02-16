@@ -17,7 +17,7 @@ Quizo is a responsive quiz management system that allows teachers to log in, cre
 ## Features
 
 - **User Login:**
-  - A simple login page with static demo credentials.
+  - A simple login page with user registration.
   - Form validation and error handling.
   
 - **Quiz Management:**
@@ -44,7 +44,8 @@ Quizo is a responsive quiz management system that allows teachers to log in, cre
 
 1. **Clone the Repository:**
 
-   git clone https://github.com/yourusername/quizo.git
+   git clone [https://github.com/Deepak-Varshney/quizo](https://github.com/Deepak-Varshney/quizo.git)
+
    cd quizo
    
 
@@ -195,6 +196,8 @@ quizo/
 ## Deployment
 
 - **Next.js Deployment:**  
+Here is the deployed link
+[https://quizo-5ptc.vercel.app/](https://quizo-5ptc.vercel.app/)
   This project can be deployed on platforms like Vercel for seamless integration of both frontend and API routes.
 - **Environment Variables:**  
   Ensure your environment variables are set correctly on your deployment platform.
