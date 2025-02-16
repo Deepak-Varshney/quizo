@@ -1,15 +1,16 @@
-import { NextRequest, NextResponse } from "next/server";
-import Quiz from "@/models/Quiz";
+import { NextRequest, NextResponse } from "next/server"; 
 import { connectToDatabase } from "@/lib/db";
+import Quiz from "@/models/Quiz";
 
 // GET /api/quizzes/[id]
 export async function GET(
   req: NextRequest,
-  { params }: { params: Record<string, string> }
+  context: any
 ): Promise<NextResponse> {
   await connectToDatabase();
   try {
-    const quiz = await Quiz.findById(params.id);
+    const { id } = context.params as { id: string };
+    const quiz = await Quiz.findById(id);
     if (!quiz)
       return NextResponse.json({ message: "Quiz not found" }, { status: 404 });
     return NextResponse.json(quiz, { status: 200 });
@@ -21,16 +22,13 @@ export async function GET(
 // PUT /api/quizzes/[id]
 export async function PUT(
   req: NextRequest,
-  { params }: { params: Record<string, string> }
+  context: any
 ): Promise<NextResponse> {
   await connectToDatabase();
   try {
+    const { id } = context.params as { id: string };
     const { title, description } = await req.json();
-    const quiz = await Quiz.findByIdAndUpdate(
-      params.id,
-      { title, description },
-      { new: true }
-    );
+    const quiz = await Quiz.findByIdAndUpdate(id, { title, description }, { new: true });
     if (!quiz)
       return NextResponse.json({ message: "Quiz not found" }, { status: 404 });
     return NextResponse.json(quiz, { status: 200 });
@@ -42,11 +40,12 @@ export async function PUT(
 // DELETE /api/quizzes/[id]
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Record<string, string> }
+  context: any
 ): Promise<NextResponse> {
   await connectToDatabase();
   try {
-    const quiz = await Quiz.findByIdAndDelete(params.id);
+    const { id } = context.params as { id: string };
+    const quiz = await Quiz.findByIdAndDelete(id);
     if (!quiz)
       return NextResponse.json({ message: "Quiz not found" }, { status: 404 });
     return NextResponse.json({ message: "Quiz deleted successfully" }, { status: 200 });
