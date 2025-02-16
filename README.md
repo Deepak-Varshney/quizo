@@ -94,7 +94,7 @@ quizo/
 ├── components/
 │   └── ui/                    # ShadCN UI components (Button, Input, Textarea, Card, etc.)
 ├── lib/
-│   └── dbConnect.ts           # MongoDB connection helper
+│   └── db.ts           # MongoDB connection helper
 ├── models/
 │   └── Quiz.ts                # Mongoose model for quizzes
 ├── pages/
