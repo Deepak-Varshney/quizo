@@ -1,15 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import {connectToDatabase} from "@/lib/db";
+import User from "@/models/User";
 
+export async function POST(req: NextRequest) {
+  await connectToDatabase();
+  try {
+    const { username, password } = await req.json();
 
-export async function POST(req:NextRequest) {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return NextResponse.json({ message: "Invalid username or password" }, { status: 401 });
+    }
 
-  const { username, password } = await req.json();
-  const staticUsername = process.env.TEACHER_USERNAME;
-  const staticPassword = process.env.TEACHER_PASSWORD;
+    if (user.password !== password) {
+      return NextResponse.json({ message: "Invalid username or password" }, { status: 401 });
+    }
 
-  if (username === staticUsername && password === staticPassword) {
-    return NextResponse.json({ message: 'Login successful' })
-  } else {
-    return NextResponse.json({ message: 'Invalid Credentials! Login not success' })
+    return NextResponse.json({ message: "Login successful" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ message: "Error logging in" }, { status: 500 });
   }
 }

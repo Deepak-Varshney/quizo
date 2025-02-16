@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json(quiz, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error retrieving quiz" },
+      { message: "Error retrieving quiz",error },
       { status: 500 }
     );
   }
